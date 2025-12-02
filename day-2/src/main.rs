@@ -27,7 +27,8 @@ fn main() {
         .expect("File is empty")
         .expect("Failed to read line");
 
-    let mut result : i64 = 0;
+    let mut result_for_part_1 : i64 = 0;
+    let mut result_for_part_2 : i64 = 0;
 
     for code_range_string in code_list.split(',') {
         let code_range_nums: Vec<&str> = code_range_string.split('-').collect();    
@@ -45,14 +46,27 @@ fn main() {
                 let second_half : &str = &code_str[half_code_length..];
 
                 if first_half == second_half {
-                    println!("{}: {}={}", code_str, first_half, second_half);
-
-                    result += code;
+                    result_for_part_1 += code;
                 }
+            }
+
+            let mut is_invalid_part2 = false;
+            for substring_length in 1..=code_length / 2 {
+                if code_length % substring_length == 0 {
+                    let pattern = &code_str[..substring_length];
+                    if pattern.repeat(code_length / substring_length) == code_str {
+                        is_invalid_part2 = true;
+                        break;
+                    }
+                }
+            }
+            if is_invalid_part2 {
+                result_for_part_2 += code;
             }
         }
     }
 
-    println!("Sum of all invalid ids: {}", result);
+    println!("Sum of all invalid ids for part 1: {}", result_for_part_1);
+    println!("Sum of all invalid ids for part 2: {}", result_for_part_2);
 
 }
