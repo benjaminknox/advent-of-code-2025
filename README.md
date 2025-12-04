@@ -11,6 +11,8 @@ https://adventofcode.com/2025
 
 [Day 3: Lobby](day-3/src/main.rs)
 
+[Day 4: Printing Department](day-4/src/main.rs)
+
 ### Running
 To run you need to have rust installed, [here is rusts docs on how to do that](https://rust-lang.org/tools/install/)
 
