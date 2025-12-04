@@ -24,7 +24,8 @@ fn main() {
 
     let mut grid : Vec<Vec<char>> = Vec::new();
 
-    let mut total_accessible_rolls : i64 = 0;
+    let mut total_accessible_rolls_for_part_1 : i64 = 0;
+    let mut total_accessible_rolls_for_part_2 : i64 = 0;
 
     for line in reader.lines() {
         let row : Vec<char> = line.expect("Failed to read line").chars().collect();
@@ -32,52 +33,74 @@ fn main() {
         grid.push(row);
     }
 
-    for (row, columns) in grid.iter().enumerate() {
-        for (column, &space_value) in columns.iter().enumerate() {
-            if space_value != '@' {
-                continue;
+    let mut first_pass : bool = true;
+
+    let mut rolls_left : bool = true;
+
+    let mut rolls_removed : Vec<(usize, usize)> = Vec::new();
+
+    while rolls_left {
+        for (row, columns) in grid.iter().enumerate() {
+            for (column, &space_value) in columns.iter().enumerate() {
+                if space_value != '@' {
+                    continue;
+                }
+
+                let mut adjacent_roll_total = 0;
+
+                if column >= 1 && row >= 1 && grid[row - 1][column - 1] == '@'{
+                    adjacent_roll_total += 1; // top left
+                }
+
+                if row >= 1 && grid[row - 1][column] == '@' {
+                  adjacent_roll_total += 1; // top
+                }
+
+                if row >= 1 && column + 1 < columns.len() && grid[row - 1][column + 1] == '@' {
+                  adjacent_roll_total += 1; //top right
+                }
+
+                if column >= 1 && grid[row][column - 1] == '@'{
+                  adjacent_roll_total += 1; // left
+                }
+
+                if row + 1 < grid.len() && column >= 1 && grid[row + 1][column - 1] == '@'{
+                  adjacent_roll_total += 1; // bottom left
+                }
+
+                if row + 1 < grid.len() && grid[row + 1][column] == '@'{
+                  adjacent_roll_total += 1; // bottom
+                }
+
+                if row + 1 < grid.len() && column + 1 < columns.len() && grid[row + 1][column + 1] == '@'{
+                  adjacent_roll_total += 1; // bottom right
+                }
+
+                if column + 1 < columns.len() && grid[row][column + 1] == '@'{
+                  adjacent_roll_total += 1; // right
+                }
+
+                if adjacent_roll_total < 4 {
+                    rolls_removed.push((row, column));
+
+                    if first_pass {
+                        total_accessible_rolls_for_part_1 += 1;
+                    }
+
+                    total_accessible_rolls_for_part_2 += 1;
+                }
             }
-
-            let mut adjacent_roll_total = 0;
-
-            if column >= 1 && row >= 1 && grid[row - 1][column - 1] == '@'{
-              adjacent_roll_total += 1; // top left
-            }
-
-            if row >= 1 && grid[row - 1][column] == '@' {
-              adjacent_roll_total += 1; // top
-            }
-
-            if row >= 1 && column + 1 < columns.len() && grid[row - 1][column + 1] == '@' {
-              adjacent_roll_total += 1; //top right
-            }
-
-            if column >= 1 && grid[row][column - 1] == '@'{
-              adjacent_roll_total += 1; // left
-            }
-
-            if row + 1 < grid.len() && column >= 1 && grid[row + 1][column - 1] == '@'{
-              adjacent_roll_total += 1; // bottom left
-            }
-
-            if row + 1 < grid.len() && grid[row + 1][column] == '@'{
-              adjacent_roll_total += 1; // bottom
-            }
-
-            if row + 1 < grid.len() && column + 1 < columns.len() && grid[row + 1][column + 1] == '@'{
-              adjacent_roll_total += 1; // bottom right
-            }
-
-            if column + 1 < columns.len() && grid[row][column + 1] == '@'{
-              adjacent_roll_total += 1; // right
-            }
-
-            if adjacent_roll_total < 4 {
-                total_accessible_rolls += 1;
-            }
-
         }
+
+        for (row, column) in rolls_removed.iter() {
+            grid[*row][*column] = '.';
+        }
+
+        first_pass = false;
+        rolls_left = rolls_removed.len() > 0;
+        rolls_removed.clear();
     }
 
-    println!("Sum of all accessible rolls: {}", total_accessible_rolls);
+    println!("Sum of all accessible rolls for part 1: {}", total_accessible_rolls_for_part_1);
+    println!("Sum of all accessible rolls for part 2: {}", total_accessible_rolls_for_part_2);
 }
