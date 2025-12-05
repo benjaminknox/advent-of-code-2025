@@ -13,6 +13,8 @@ https://adventofcode.com/2025
 
 [Day 4: Printing Department](day-4/src/main.rs)
 
+[Day 5: Cafeteria](day-5/src/main.rs)
+
 ### Running
 To run you need to have rust installed, [here is rusts docs on how to do that](https://rust-lang.org/tools/install/)
 
