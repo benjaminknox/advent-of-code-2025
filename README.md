@@ -17,6 +17,8 @@ https://adventofcode.com/2025
 
 [Day 6: Trash Compactor](day-6/src/main.rs)
 
+[Day 7: Laboratories](day-7/src/main.rs):
+
 ### Running
 To run you need to have rust installed, [here is rusts docs on how to do that](https://rust-lang.org/tools/install/)
 
